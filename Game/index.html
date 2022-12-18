@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    /* Add your cool CSS styles here */
+    body {
+      background-image: url(./Goku.jpg);
+    }
+    button {
+      font-size: 18px;
+      border: none;
+      cursor: pointer;
+      padding: 10px;
+      border-radius: 5px;
+      margin: 5px;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: skyblue;
+    }
+    .game-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .game-message {
+      font-size: 32px;
+      font-weight: bold;
+      margin: 20px;
+    }
+    .target {
+      width: 50px;
+      height: 50px;
+      background-color: red;
+      border-radius: 25px;
+      position: absolute;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .target:hover {
+      background-color: darkred;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <div class="game-message">Click the button to start the game</div>
+    <button onclick="startGame()">Start Game</button>
+  </div>
+
+  <script>
+    // Initialize variables
+    let score = 0;
+    let timeLeft = 60;
+    let timerInterval;
+    let targets = [];
+
+    function startGame() {
+      // Hide start button and show score and time
+      document.querySelector('.game-message').innerHTML = `Score: ${score} Time: ${timeLeft}`;
+      document.querySelector('button').style.display = 'none';
+
+      // Create target elements and add them to the page
+      while (targets.length < 100) {
+  let target = document.createElement('div');
+  target.classList.add('target');
+  let x = Math.floor(Math.random() * window.innerWidth);
+  let y = Math.floor(Math.random() * window.innerHeight);
+  target.style.left = x + 'px';
+  target.style.top = y + 'px';
+  document.body.appendChild(target);
+  targets.push(target);
+}
+
+
+      // Add event listeners for clicking on targets
+      targets.forEach(target => {
+        target.addEventListener('click', () => {
+          score++;
+          document.querySelector('.game-message').innerHTML = `Score: ${score} Time: ${timeLeft}`;
+          target.style.display = 'none';
+        });
+      });
+
+      // Start timer
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        document.querySelector('.game-message').innerHTML = `Score: ${score} Time: ${timeLeft}`;
+        if (timeLeft <= 0) {
+            endGame();
+        }
+      }, 1000);
+    }
+
+    function endGame() {
+      // Clear timer and remove event listeners
+      clearInterval(timerInterval);
+      targets.forEach(target => {
+        target.removeEventListener('click', () => {});
+      });
+
+      // Remove targets from the page
+      targets.forEach(target => {
+        target.parentNode.removeChild(target);
+      });
+
+      // Show end game message and start button
+      document.querySelector('.game-message').innerHTML = `Game Over! Your final score is ${score}`;
+      document.querySelector('button').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
+

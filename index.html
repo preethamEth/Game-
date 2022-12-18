@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+    <title>Clickable Game</title>
+<head>
+  <style>
+    /* Add your cool CSS styles here */
+    body {
+      background-image: url(./wallpaperflare.com_wallpaper\ \(6\).jpg);
+    }
+    button {
+      font-size: 28px;
+      border: none;
+      cursor: pointer;
+      padding: 10px;
+      border-radius: 8px;
+      margin: 5px;
+      transition: 0.3s;
+    }
+    button:hover {
+      background-color: skyblue;
+    }
+    .game-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .game-message {
+      font-size: 52px;
+      font-weight: bold;
+      margin: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <div class="game-message">Click the button to start the game</div>
+    <button onclick="startGame()">Start Game</button>
+  </div>
+
+  <script>
+    // Initialize variables
+    let score = 0;
+    let timeLeft = 60;
+    let timerInterval;
+
+    function startGame() {
+      // Hide start button and show score and time
+      document.querySelector('.game-message').innerHTML = `Score: ${score} Time: ${timeLeft}`;
+      document.querySelector('button').style.display = 'none';
+
+      // Start timer
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        document.querySelector('.game-message').innerHTML = `Score: ${score} Time: ${timeLeft}`;
+        if (timeLeft <= 0) {
+          endGame();
+        }
+      }, 1000);
+
+      // Add event listener for clicking on the body
+      document.body.addEventListener('click', () => {
+        score++;
+        document.querySelector('.game-message').innerHTML = `Score: ${score} Time: ${timeLeft}`;
+      });
+    }
+
+    function endGame() {
+      // Clear timer and remove event listener
+      clearInterval(timerInterval);
+      document.body.removeEventListener('click', () => {});
+
+      // Show end game message and start button
+      document.querySelector('.game-message').innerHTML = `Game Over! Your final score is ${score}`;
+      document.querySelector('button').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
